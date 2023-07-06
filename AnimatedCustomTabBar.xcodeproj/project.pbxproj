@@ -11,6 +11,7 @@
 		D18D77A82A56FB3B00F712DC /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D18D77A72A56FB3B00F712DC /* ContentView.swift */; };
 		D18D77AA2A56FB3D00F712DC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D18D77A92A56FB3D00F712DC /* Assets.xcassets */; };
 		D18D77AD2A56FB3D00F712DC /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D18D77AC2A56FB3D00F712DC /* Preview Assets.xcassets */; };
+		D18D77B52A56FE2100F712DC /* Home.swift in Sources */ = {isa = PBXBuildFile; fileRef = D18D77B42A56FE2100F712DC /* Home.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -19,6 +20,7 @@
 		D18D77A72A56FB3B00F712DC /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		D18D77A92A56FB3D00F712DC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D18D77AC2A56FB3D00F712DC /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		D18D77B42A56FE2100F712DC /* Home.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Home.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -51,6 +53,7 @@
 		D18D77A42A56FB3B00F712DC /* AnimatedCustomTabBar */ = {
 			isa = PBXGroup;
 			children = (
+				D18D77B32A56FE1B00F712DC /* View */,
 				D18D77A52A56FB3B00F712DC /* AnimatedCustomTabBarApp.swift */,
 				D18D77A72A56FB3B00F712DC /* ContentView.swift */,
 				D18D77A92A56FB3D00F712DC /* Assets.xcassets */,
@@ -65,6 +68,14 @@
 				D18D77AC2A56FB3D00F712DC /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		D18D77B32A56FE1B00F712DC /* View */ = {
+			isa = PBXGroup;
+			children = (
+				D18D77B42A56FE2100F712DC /* Home.swift */,
+			);
+			path = View;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -138,6 +149,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D18D77A82A56FB3B00F712DC /* ContentView.swift in Sources */,
+				D18D77B52A56FE2100F712DC /* Home.swift in Sources */,
 				D18D77A62A56FB3B00F712DC /* AnimatedCustomTabBarApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
