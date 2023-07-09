@@ -11,6 +11,12 @@ struct Home: View {
     
     @State var isImageActiaveTool : Bool = false
     @State var size: CGSize = .zero
+    @State var sizeColor: CGSize = .zero
+    @State var lineWidth: Int = 1
+    @State var chossedColor: Color = Color("PastelBlue")
+    @State var wantChangColor: Bool = false
+    @State var fakedColors: [PencilColors] = []
+    @State var currentColor = " "
     
     var body: some View {
         
@@ -21,14 +27,50 @@ struct Home: View {
     @ViewBuilder
     func tabBarItems() -> some View {
         
-        ZStack {
-//            Color.clear
-            GeometryReader { geo in
+        GeometryReader { geo in
+            let maxToolbarY = geo.frame(in: .named("ToolBarItems")).minY
+            let toolBarPlacament = geo.frame(in: .named("ToolBarItems")).midY
+            ZStack {
+                //            Color.clear
+                
+                
+                //            GeometryReader { geo in
+                //                let maxToolbarY = geo.frame(in: .named("ToolBarItems")).minY
+                //                let toolBarPlacament = geo.frame(in: .named("ToolBarItems")).midY
+                
+                ScrollView(.horizontal, showsIndicators: false) {
+                    
+                    HStack {
+                        ForEach(fakedColors, id: \.id) { color in
+                            Button {
+                                withAnimation {
+                                    chossedColor = color.color
+                                    wantChangColor.toggle()
+                                }
+                                
+                            } label: {
+                                Capsule()
+                                    .fill(color.color)
+                                    .frame(width: 60, height: 60)
+                            }
+                            .tag(currentColor)
+                        }
+                    }
+                    .zIndex(0)
+                    .offset(x: geo.size.width / 14)
+                    
+                    
+                    
+                }
+                .zIndex(0)
+                .padding(.bottom, 30)
+                .offset(y: wantChangColor ? -size.height : -30)
+                .opacity(wantChangColor ? 1.0 : 0)
                 HStack {
                     Button {
                         
                     } label: {
-                        Text("1")
+                        Text(String(lineWidth))
                         
                             .foregroundColor(.white)
                             .frame(width: 30, height: 30)
@@ -40,19 +82,16 @@ struct Home: View {
                     }
                     
                     Button {
-                        
+                        withAnimation(.interactiveSpring(response: 0.5, dampingFraction: 0.6, blendDuration: 0.6)) {
+                            wantChangColor.toggle()
+                        }
                     } label: {
-                        Text("1")
-                        
-                            .foregroundColor(.white)
-                            .frame(width: 30, height: 30)
-                            .padding()
-                            .background {
-                                RoundedRectangle(cornerRadius: 35)
-                                    .fill(.black)
-                            }
+                        Capsule()
+                            .fill(chossedColor)
+                            .frame(width: 60, height: 60)
                     }
                 }
+                .zIndex(2)
                 .padding(.leading, 5)
                 .opacity(isImageActiaveTool ? 1.0 : 0)
                 .offset(x: isImageActiaveTool ? size.width / 2 : 0)
@@ -83,7 +122,7 @@ struct Home: View {
                                 isImageActiaveTool = true
                             } else {
                                 isImageActiaveTool.toggle()
-                            }   
+                            }
                         }
                     } label: {
                         Image(isImageActiaveTool ? "PencilWhite" : "Pencil")
@@ -97,6 +136,8 @@ struct Home: View {
                             }
                     }
                 }
+                .zIndex(1)
+                .coordinateSpace(name: "ToolBarItems")
                 .offset(x: isImageActiaveTool ? -(size.width / 2) : 0)
                 .padding(3)
                 .background {
@@ -105,11 +146,28 @@ struct Home: View {
                         .frame(width: isImageActiaveTool ? size.width * 2 + 5 : nil)
                         .offset(x: isImageActiaveTool ? 1 : 0)
                 }
-                .frame(width: geo.size.width, height: geo.size.height, alignment: .center)
-
+                .overlay {
+                    
+                    Text(String(describing: sizeColor))
+                        .offset(y: 120)
+                }
+                .saveSize($sizeColor)
             }
-            Text(String(describing: size))
-                .offset(y: 100)
+            .onAppear {
+                fakedColors.append(contentsOf: colors)
+                
+                if var firstColor = colors.first, var lastColor = colors.last {
+                    
+                    currentColor = firstColor.id.uuidString
+                    
+                    firstColor.id = .init()
+                    lastColor.id = .init()
+                    
+                    
+                    fakedColors.append(firstColor)
+                    fakedColors.insert(lastColor, at: 0)
+                }
+            }
         }
     }
     
