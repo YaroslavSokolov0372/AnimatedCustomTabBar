@@ -9,6 +9,8 @@ import SwiftUI
 
 struct Home: View {
     
+    @State var circleSize: CGSize = .zero
+
     @State var isImageActiaveTool : Bool = false
     @State var size: CGSize = .zero
     @State var sizeColor: CGSize = .zero
@@ -17,6 +19,24 @@ struct Home: View {
     @State var wantChangColor: Bool = false
     @State var fakedColors: [PencilColors] = []
     @State var currentColor = " "
+    @State var offsetOfCircle: CGFloat = 61.0
+    @State var colorsPassed: Int = 1
+    @State var nextValue = 1
+    @State var deleteValue = 1
+
+    @State var colors: [PencilColors] = [PencilColors(color: Color("PastelGreen"), id: .init()),
+                                  PencilColors(color: Color("PastelGreen2"), id: .init()),
+                                  PencilColors(color: Color("PastelBlue"), id: .init()),
+                                  PencilColors(color: Color("PastelOrange"), id: .init()),
+                                  PencilColors(color: Color("PastelYellow"), id: .init()),
+                                  PencilColors(color: Color("GrayLight") , id: .init()),
+                                  PencilColors(color: Color("LightGray"), id: .init())
+                                    ]
+    
+    
+    
+    
+    
     
     var body: some View {
         
@@ -28,20 +48,11 @@ struct Home: View {
     func tabBarItems() -> some View {
         
         GeometryReader { geo in
-            let maxToolbarY = geo.frame(in: .named("ToolBarItems")).minY
-            let toolBarPlacament = geo.frame(in: .named("ToolBarItems")).midY
             ZStack {
-                //            Color.clear
-                
-                
-                //            GeometryReader { geo in
-                //                let maxToolbarY = geo.frame(in: .named("ToolBarItems")).minY
-                //                let toolBarPlacament = geo.frame(in: .named("ToolBarItems")).midY
-                
                 ScrollView(.horizontal, showsIndicators: false) {
                     
                     HStack {
-                        ForEach(fakedColors, id: \.id) { color in
+                        ForEach(colors, id: \.id) { color in
                             Button {
                                 withAnimation {
                                     chossedColor = color.color
@@ -53,13 +64,60 @@ struct Home: View {
                                     .fill(color.color)
                                     .frame(width: 60, height: 60)
                             }
-                            .tag(currentColor)
+                            .saveSize($circleSize)
+
+                            ///Calculating Entire colors offset
+                            
                         }
+
                     }
-                    .zIndex(0)
+
+                    .offsetX() { rect in
+                        let minX = rect.minX
+                        let colorSize = circleSize.width
+                        let FourHalfColorSize = colorSize / 4
+                        let ThreeHalfeColorSize = FourHalfColorSize - 4.2
+                        let sizeToDelete = ThreeHalfeColorSize * CGFloat(deleteValue)
+
+                        
+                        print("minX - \(minX)")
+                        let sizeToPass = FourHalfColorSize * CGFloat(nextValue)
+                        print(" size to pass \(sizeToPass)")
+                        
+                        if -minX > sizeToPass {
+                            if sizeToPass == -0.0 || colorsPassed == 7 {
+                                colorsPassed = 1
+                            } else {
+                                colorsPassed += 1
+                            }
+                            nextValue += 1
+                            deleteValue += 1
+                            DispatchQueue.main.async {
+                                colors.append(colors[colorsPassed - 1])
+                            }
+                            
+                        }
+                        
+                        
+                        else if -minX < sizeToDelete && sizeToDelete != -0.0 && sizeToDelete != -0.0 && minX != 0.0 && deleteValue != 1 {
+                            nextValue -= 1
+                            deleteValue -= 1
+                            DispatchQueue.main.async {
+                                colors.removeLast()
+                            }
+                            
+                            print("need to delete last item from array")
+
+
+                        }
+                        print("now in scroll view \(colors.count) colors")
+                        print("size to delete \(sizeToDelete)")
+                        print("color passed - \(colorsPassed)")
+
+//                        print(colorsPassed)
+                    }
                     .offset(x: geo.size.width / 14)
-                    
-                    
+                    .zIndex(0)
                     
                 }
                 .zIndex(0)
@@ -191,17 +249,31 @@ extension View {
 
 
 
+//struct SizeCalculator: ViewModifier {
+//    @Binding var size: CGSize
+//    func body(content: Content) -> some View {
+//        content
+//            .background(
+//                GeometryReader { proxy in
+//                    Color.clear
+//                        .onAppear {
+//                            size = proxy.size
+//                        }
+//                }
+//            )
+//    }
+//}
 struct SizeCalculator: ViewModifier {
     @Binding var size: CGSize
     func body(content: Content) -> some View {
         content
-            .background(
+            .overlay {
                 GeometryReader { proxy in
                     Color.clear
                         .onAppear {
                             size = proxy.size
                         }
                 }
-            )
+            }
     }
 }
