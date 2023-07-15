@@ -23,7 +23,7 @@ struct Home: View {
     @State var colorsPassed: Int = 1
     @State var nextValue = 1
     @State var deleteValue = 1
-
+    @State var wantChangeLineWidth = false
     @State var colors: [PencilColors] = [PencilColors(color: Color("PastelGreen"), id: .init()),
                                   PencilColors(color: Color("PastelGreen2"), id: .init()),
                                   PencilColors(color: Color("PastelBlue"), id: .init()),
@@ -71,7 +71,6 @@ struct Home: View {
                         }
 
                     }
-
                     .offsetX() { rect in
                         let minX = rect.minX
                         let colorSize = circleSize.width
@@ -96,10 +95,7 @@ struct Home: View {
                                 colors.append(colors[colorsPassed - 1])
                             }
                             
-                        }
-                        
-                        
-                        else if -minX < sizeToDelete && sizeToDelete != -0.0 && sizeToDelete != -0.0 && minX != 0.0 && deleteValue != 1 {
+                        } else if -minX < sizeToDelete && sizeToDelete != -0.0 && sizeToDelete != -0.0 && minX != 0.0 && deleteValue != 1 {
                             nextValue -= 1
                             deleteValue -= 1
                             DispatchQueue.main.async {
@@ -124,9 +120,54 @@ struct Home: View {
                 .padding(.bottom, 30)
                 .offset(y: wantChangColor ? -size.height : -30)
                 .opacity(wantChangColor ? 1.0 : 0)
+                
+                
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack {
+                        ForEach(1...99, id: \.self) { num in
+                            
+                                
+                                
+                                
+                                Button {
+                                    withAnimation(.interactiveSpring(response: 0.5, dampingFraction: 0.6, blendDuration: 0.6)) {
+                                        lineWidth = num
+                                        wantChangeLineWidth.toggle()
+                                    }
+                                    
+                                } label: {
+                                    Text(String(num))
+                                        .foregroundColor(.white)
+                                }
+                                
+                                
+                                .frame(width: 30, height: 30)
+                                .padding()
+                                .background(
+                                    RoundedRectangle(cornerRadius: 35)
+                                        .fill(.black)
+                                )
+                        }
+                    }
+//                    .offset(x: geo.size.width / 14)
+                    .padding([.leading, .trailing], 25)
+                    .frame(height: circleSize.height + 6)
+                }
+                .zIndex(0)
+                .padding(.bottom, 30)
+                .offset(y: wantChangeLineWidth ? -size.height : -30)
+                .opacity(wantChangeLineWidth ? 1.0 : 0)
+                
+                
                 HStack {
                     Button {
-                        
+                        withAnimation(.interactiveSpring(response: 0.5, dampingFraction: 0.6, blendDuration: 0.6)) {
+                            wantChangeLineWidth.toggle()
+                            
+                            if wantChangColor == true {
+                                wantChangColor.toggle()
+                            }
+                        }
                     } label: {
                         Text(String(lineWidth))
                         
@@ -142,6 +183,10 @@ struct Home: View {
                     Button {
                         withAnimation(.interactiveSpring(response: 0.5, dampingFraction: 0.6, blendDuration: 0.6)) {
                             wantChangColor.toggle()
+                            
+                            if wantChangeLineWidth == true {
+                                wantChangeLineWidth.toggle()
+                            }
                         }
                     } label: {
                         Capsule()
@@ -174,6 +219,7 @@ struct Home: View {
                                     .fill(!isImageActiaveTool ? .black : .black.opacity(0.2))
                             }
                     }
+                    
                     Button {
                         withAnimation(.default.speed(2)){
                             if isImageActiaveTool {
@@ -211,21 +257,7 @@ struct Home: View {
                 }
                 .saveSize($sizeColor)
             }
-            .onAppear {
-                fakedColors.append(contentsOf: colors)
-                
-                if var firstColor = colors.first, var lastColor = colors.last {
-                    
-                    currentColor = firstColor.id.uuidString
-                    
-                    firstColor.id = .init()
-                    lastColor.id = .init()
-                    
-                    
-                    fakedColors.append(firstColor)
-                    fakedColors.insert(lastColor, at: 0)
-                }
-            }
+
         }
     }
     
@@ -240,11 +272,7 @@ struct Home_Previews: PreviewProvider {
 }
 
 
-extension View {
-    func saveSize(_ size: Binding<CGSize>) -> some View {
-        modifier(SizeCalculator(size: size))
-    }
-}
+
 
 
 
@@ -263,17 +291,20 @@ extension View {
 //            )
 //    }
 //}
-struct SizeCalculator: ViewModifier {
-    @Binding var size: CGSize
-    func body(content: Content) -> some View {
-        content
-            .overlay {
-                GeometryReader { proxy in
-                    Color.clear
-                        .onAppear {
-                            size = proxy.size
-                        }
-                }
-            }
-    }
-}
+
+
+//    .onAppear {
+//        fakedColors.append(contentsOf: colors)
+//
+//        if var firstColor = colors.first, var lastColor = colors.last {
+//
+//            currentColor = firstColor.id.uuidString
+//
+//            firstColor.id = .init()
+//            lastColor.id = .init()
+//
+//
+//            fakedColors.append(firstColor)
+//            fakedColors.insert(lastColor, at: 0)
+//        }
+//    }
