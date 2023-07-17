@@ -10,33 +10,21 @@ import SwiftUI
 struct Home: View {
     
     @State var circleSize: CGSize = .zero
-
-    @State var isImageActiaveTool : Bool = false
+    @State var isUserWantToDraw : Bool = false
     @State var size: CGSize = .zero
     @State var sizeColor: CGSize = .zero
     @State var lineWidth: Int = 1
     @State var chossedColor: Color = Color("PastelBlue")
     @State var wantChangColor: Bool = false
-    @State var fakedColors: [PencilColors] = []
-    @State var currentColor = " "
-    @State var offsetOfCircle: CGFloat = 61.0
-    @State var colorsPassed: Int = 1
-    @State var nextValue = 1
-    @State var deleteValue = 1
     @State var wantChangeLineWidth = false
     @State var colors: [PencilColors] = [PencilColors(color: Color("PastelGreen"), id: .init()),
-                                  PencilColors(color: Color("PastelGreen2"), id: .init()),
-                                  PencilColors(color: Color("PastelBlue"), id: .init()),
-                                  PencilColors(color: Color("PastelOrange"), id: .init()),
-                                  PencilColors(color: Color("PastelYellow"), id: .init()),
-                                  PencilColors(color: Color("GrayLight") , id: .init()),
-                                  PencilColors(color: Color("LightGray"), id: .init())
-                                    ]
-    
-    
-    
-    
-    
+                                         PencilColors(color: Color("PastelGreen2"), id: .init()),
+                                         PencilColors(color: Color("PastelBlue"), id: .init()),
+                                         PencilColors(color: Color("PastelOrange"), id: .init()),
+                                         PencilColors(color: Color("PastelYellow"), id: .init()),
+                                         PencilColors(color: Color("GrayLight") , id: .init()),
+                                         PencilColors(color: Color("LightGray"), id: .init())
+    ]
     
     var body: some View {
         
@@ -44,11 +32,15 @@ struct Home: View {
         
     }
     
+    
+    
     @ViewBuilder
     func tabBarItems() -> some View {
         
-        GeometryReader { geo in
+
             ZStack {
+                
+                /// Scroll View for changing Color
                 ScrollView(.horizontal, showsIndicators: false) {
                     
                     HStack {
@@ -64,55 +56,8 @@ struct Home: View {
                                     .fill(color.color)
                                     .frame(width: 60, height: 60)
                             }
-                            .saveSize($circleSize)
-
-                            ///Calculating Entire colors offset
-                            
                         }
-
                     }
-                    .offsetX() { rect in
-                        let minX = rect.minX
-                        let colorSize = circleSize.width
-                        let FourHalfColorSize = colorSize / 4
-                        let ThreeHalfeColorSize = FourHalfColorSize - 4.2
-                        let sizeToDelete = ThreeHalfeColorSize * CGFloat(deleteValue)
-
-                        
-                        print("minX - \(minX)")
-                        let sizeToPass = FourHalfColorSize * CGFloat(nextValue)
-                        print(" size to pass \(sizeToPass)")
-                        
-                        if -minX > sizeToPass {
-                            if sizeToPass == -0.0 || colorsPassed == 7 {
-                                colorsPassed = 1
-                            } else {
-                                colorsPassed += 1
-                            }
-                            nextValue += 1
-                            deleteValue += 1
-                            DispatchQueue.main.async {
-                                colors.append(colors[colorsPassed - 1])
-                            }
-                            
-                        } else if -minX < sizeToDelete && sizeToDelete != -0.0 && sizeToDelete != -0.0 && minX != 0.0 && deleteValue != 1 {
-                            nextValue -= 1
-                            deleteValue -= 1
-                            DispatchQueue.main.async {
-                                colors.removeLast()
-                            }
-                            
-                            print("need to delete last item from array")
-
-
-                        }
-                        print("now in scroll view \(colors.count) colors")
-                        print("size to delete \(sizeToDelete)")
-                        print("color passed - \(colorsPassed)")
-
-//                        print(colorsPassed)
-                    }
-                    .offset(x: geo.size.width / 14)
                     .zIndex(0)
                     
                 }
@@ -121,7 +66,7 @@ struct Home: View {
                 .offset(y: wantChangColor ? -size.height : -30)
                 .opacity(wantChangColor ? 1.0 : 0)
                 
-                
+                /// Scroll View for changing LineWidth
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack {
                         ForEach(1...99, id: \.self) { num in
@@ -149,16 +94,13 @@ struct Home: View {
                                 )
                         }
                     }
-//                    .offset(x: geo.size.width / 14)
-                    .padding([.leading, .trailing], 25)
-                    .frame(height: circleSize.height + 6)
                 }
                 .zIndex(0)
                 .padding(.bottom, 30)
                 .offset(y: wantChangeLineWidth ? -size.height : -30)
                 .opacity(wantChangeLineWidth ? 1.0 : 0)
                 
-                
+                /// Buttons for changing parameters for drawing
                 HStack {
                     Button {
                         withAnimation(.interactiveSpring(response: 0.5, dampingFraction: 0.6, blendDuration: 0.6)) {
@@ -196,60 +138,77 @@ struct Home: View {
                 }
                 .zIndex(2)
                 .padding(.leading, 5)
-                .opacity(isImageActiaveTool ? 1.0 : 0)
-                .offset(x: isImageActiaveTool ? size.width / 2 : 0)
+                .opacity(isUserWantToDraw == true ? 1.0 : 0)
+                .offset(x: isUserWantToDraw == true ? size.width / 4 : 0)
                 .saveSize($size)
-                .frame(width: geo.size.width, height: geo.size.height, alignment: .center)
+//                .frame(width: geo.size.width, height: geo.size.height, alignment: .center)
+                
+                
+                /// Pencil button to get access to parametrs of pencil
                 HStack {
                     
                     
-                    Button {
-                        withAnimation(.default.speed(2)) {
-                            isImageActiaveTool.toggle()
-                        }
-                        
-                    } label: {
-                        Image(isImageActiaveTool ? "Camera" : "CameraWhite")
-                            .resizable()
-                            .foregroundColor(isImageActiaveTool ? .black : .white)
-                            .frame(width: 30, height: 30)
-                            .padding()
-                            .background {
-                                RoundedRectangle(cornerRadius: 35)
-                                    .fill(!isImageActiaveTool ? .black : .black.opacity(0.2))
-                            }
-                    }
+//                    Button {
+//                        withAnimation(.default.speed(2)) {
+//                            if isImageActiaveTool != .camera {
+//                                isImageActiaveTool = .camera
+//                                wantChangColor = false
+//                                wantChangeLineWidth = false
+//                            } else {
+//                                isImageActiaveTool = .nothing
+//                                wantChangColor = false
+//                                wantChangeLineWidth = false
+//                            }
+//                        }
+//
+//
+//
+//                    } label: {
+//                        Image(isImageActiaveTool == .camera ? "NewCameraWhite" : "NewCamera" )
+//                            .resizable()
+//                            .foregroundColor(isImageActiaveTool == .camera ? .black : .white)
+//                            .frame(width: 35, height: 35)
+//                            .padding(13)
+//                            .background {
+//                                RoundedRectangle(cornerRadius: 35)
+//                                    .fill(isImageActiaveTool == .camera ? .black : .black.opacity(0.2))
+//                            }
+//                    }
                     
                     Button {
                         withAnimation(.default.speed(2)){
-                            if isImageActiaveTool {
-                                isImageActiaveTool = true
+                            if isUserWantToDraw != true {
+                                isUserWantToDraw = true
                             } else {
-                                isImageActiaveTool.toggle()
+                                isUserWantToDraw = false
+                                wantChangColor = false
+                                wantChangeLineWidth = false
                             }
                         }
                     } label: {
-                        Image(isImageActiaveTool ? "PencilWhite" : "Pencil")
+                        Image(isUserWantToDraw == true ? "PencilWhite" : "Pencil")
                             .resizable()
-                            .foregroundColor(isImageActiaveTool ? .white : .black)
+                            .foregroundColor(isUserWantToDraw == true ? .white : .black)
                             .frame(width: 30, height: 30)
                             .padding()
                             .background {
                                 RoundedRectangle(cornerRadius: 35)
-                                    .fill(isImageActiaveTool ? .black : .black.opacity(0.2))
+                                    .fill(isUserWantToDraw == true ? .black : .black.opacity(0.2))
                             }
                     }
                 }
                 .zIndex(1)
                 .coordinateSpace(name: "ToolBarItems")
-                .offset(x: isImageActiaveTool ? -(size.width / 2) : 0)
+                .offset(x: isUserWantToDraw == true ? -(size.width / 2) : 0)
                 .padding(3)
                 .background {
                     RoundedRectangle(cornerRadius: 35)
                         .fill(.black.opacity(0.2))
-                        .frame(width: isImageActiaveTool ? size.width * 2 + 5 : nil)
-                        .offset(x: isImageActiaveTool ? 1 : 0)
+                        .frame(width: isUserWantToDraw == true ? size.width * 1.5 + 5 : nil)
+                        .offset(x: isUserWantToDraw == true ? 1 : 0)
                 }
+                
+                /// Helpers to get size of button
                 .overlay {
                     
                     Text(String(describing: sizeColor))
@@ -257,12 +216,7 @@ struct Home: View {
                 }
                 .saveSize($sizeColor)
             }
-
-        }
     }
-    
-    
-
 }
 
 struct Home_Previews: PreviewProvider {
@@ -271,40 +225,3 @@ struct Home_Previews: PreviewProvider {
     }
 }
 
-
-
-
-
-
-
-//struct SizeCalculator: ViewModifier {
-//    @Binding var size: CGSize
-//    func body(content: Content) -> some View {
-//        content
-//            .background(
-//                GeometryReader { proxy in
-//                    Color.clear
-//                        .onAppear {
-//                            size = proxy.size
-//                        }
-//                }
-//            )
-//    }
-//}
-
-
-//    .onAppear {
-//        fakedColors.append(contentsOf: colors)
-//
-//        if var firstColor = colors.first, var lastColor = colors.last {
-//
-//            currentColor = firstColor.id.uuidString
-//
-//            firstColor.id = .init()
-//            lastColor.id = .init()
-//
-//
-//            fakedColors.append(firstColor)
-//            fakedColors.insert(lastColor, at: 0)
-//        }
-//    }

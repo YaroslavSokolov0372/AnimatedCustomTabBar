@@ -14,6 +14,8 @@
 		D18D77B52A56FE2100F712DC /* Home.swift in Sources */ = {isa = PBXBuildFile; fileRef = D18D77B42A56FE2100F712DC /* Home.swift */; };
 		D18D77BD2A5ABEE100F712DC /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = D18D77BC2A5ABEE100F712DC /* Colors.swift */; };
 		D18D77C02A5C3A1500F712DC /* OffsetReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = D18D77BF2A5C3A1500F712DC /* OffsetReader.swift */; };
+		D1D27E3F2A64287100694C7D /* EnumForTabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1D27E3E2A64287100694C7D /* EnumForTabBar.swift */; };
+		D1D27E412A642EDF00694C7D /* SizeReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1D27E402A642EDF00694C7D /* SizeReader.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -25,6 +27,8 @@
 		D18D77B42A56FE2100F712DC /* Home.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Home.swift; sourceTree = "<group>"; };
 		D18D77BC2A5ABEE100F712DC /* Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
 		D18D77BF2A5C3A1500F712DC /* OffsetReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OffsetReader.swift; sourceTree = "<group>"; };
+		D1D27E3E2A64287100694C7D /* EnumForTabBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnumForTabBar.swift; sourceTree = "<group>"; };
+		D1D27E402A642EDF00694C7D /* SizeReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SizeReader.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -88,6 +92,7 @@
 			isa = PBXGroup;
 			children = (
 				D18D77BC2A5ABEE100F712DC /* Colors.swift */,
+				D1D27E3E2A64287100694C7D /* EnumForTabBar.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -96,6 +101,7 @@
 			isa = PBXGroup;
 			children = (
 				D18D77BF2A5C3A1500F712DC /* OffsetReader.swift */,
+				D1D27E402A642EDF00694C7D /* SizeReader.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -174,6 +180,8 @@
 				D18D77C02A5C3A1500F712DC /* OffsetReader.swift in Sources */,
 				D18D77BD2A5ABEE100F712DC /* Colors.swift in Sources */,
 				D18D77B52A56FE2100F712DC /* Home.swift in Sources */,
+				D1D27E412A642EDF00694C7D /* SizeReader.swift in Sources */,
+				D1D27E3F2A64287100694C7D /* EnumForTabBar.swift in Sources */,
 				D18D77A62A56FB3B00F712DC /* AnimatedCustomTabBarApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
